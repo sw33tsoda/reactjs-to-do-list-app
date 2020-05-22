@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ListItem from './ListItem';
+import classNames from 'classnames';
 
 class ToDoList extends Component {
     constructor() {
@@ -156,9 +157,9 @@ class ToDoList extends Component {
                         return null;
                     })}
                 </div>
-                <button className="button button-bottom" onClick={this.setFilter('default')}>Default</button>
-                <button className="button button-bottom" onClick={this.setFilter('undone')}>Undone</button>
-                <button className="button button-bottom" onClick={this.setFilter('done')}>Done</button>
+                <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'default'})} onClick={this.setFilter('default')}>Default</button>
+                <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'undone'})} onClick={this.setFilter('undone')}>Undone</button>
+                <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'done'})} onClick={this.setFilter('done')}>Done</button>
             </div>
         );
     };

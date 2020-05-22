@@ -64,6 +64,12 @@
     background: none;
 }
 
+button::-moz-focus-inner {
+  border: 0;
+}
+
+
+
 .button-bottom {
     margin-right: 5px;
 }
@@ -78,4 +84,9 @@
 
 .input2 {
     border:0;
+}
+
+.filterActive {
+    background:silver;
+    color: white;
 }
