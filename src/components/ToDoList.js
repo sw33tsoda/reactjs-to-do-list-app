@@ -3,25 +3,50 @@ import ListItem from './ListItem';
 import classNames from 'classnames';
 
 class ToDoList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             toDoList : {
+                time : new Date(),
                 filter:'default',
                 appName : 'to-do-list',
                 items: [
-                    {text:'Ngủ dậy',isDone:false,editMode:false},
-                    {text:'Đánh răng',isDone:false,editMode:false},
-                    {text:'Đi học',isDone:false,editMode:false},
-                    {text:'Cười',isDone:false,editMode:false},
-                    {text:'Khóc',isDone:false,editMode:false},
-                    {text:'Nắng',isDone:false,editMode:false},
-                    {text:'Mứa',isDone:false,editMode:false},
+                    {text:'Cười nhẹ',   isDone:false,   editMode:false},
+                    {text:'Đánh răng',  isDone:false,   editMode:false},
+                    {text:'Đi học',     isDone:false,   editMode:false},
+                    {text:'Cười',       isDone:false,   editMode:false},
+                    {text:'Khóc',       isDone:false,   editMode:false},
+                    {text:'Nắng',       isDone:false,   editMode:false},
+                    {text:'Mứa',        isDone:false,   editMode:false},
                 ],
             }
         }
         this.addItem = this.addItem.bind(this);
         this.allDone = this.allDone.bind(this);
+
+        this.inputElement = React.createRef();
+    }
+    
+    componentDidMount() {
+        this.inputElement.current.focus();
+
+        this.timer = setInterval(() => {
+            const time = new Date().toLocaleString();
+            this.setState({
+                toDoList: {
+                    ...this.state.toDoList,
+                    time:time,
+                }
+            })
+        },1000);
+    }
+
+    componentDidUpdate() {
+        //
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     chooseItem (item) {
@@ -48,7 +73,7 @@ class ToDoList extends Component {
             if (!itemValue) alert('Empty input!');
             else {
                 const items = this.state.toDoList.items;
-                items.unshift({text:itemValue,isDone:false});
+                items.unshift({text:itemValue,isDone:false,editMode:false});
                 this.setState({
                     toDoList:{
                         ...this.state.toDoList,
@@ -139,12 +164,12 @@ class ToDoList extends Component {
     render() {
         const {toDoList} = this.state;
         const unDones = toDoList.items.reduce((num,item) => !item.isDone ? num+1 : num ,0);
-        return (
+        return (<React.Fragment>
             <div id={toDoList.appName}>
-                <p className="title"><span>{unDones}</span> have not done yet!</p>
+                <p className="title">{toDoList.time.toLocaleString()}<br></br><span>{unDones}</span> have not done yet! </p>
                 <div className="allDone-and-add">
                     <button className="button" onClick={this.allDone}>All</button>
-                    <input className="input" type="text" placeholder="Add something needs to be done." onKeyUp={this.addItem}></input>
+                    <input className="input" type="text" ref={this.inputElement} placeholder="Add something needs to be done." onKeyUp={this.addItem}></input>
                 </div>
                 <div className="to-do-item-group">
                     {toDoList.items.map((item,index) => {
@@ -160,7 +185,7 @@ class ToDoList extends Component {
                 <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'default'})} onClick={this.setFilter('default')}>Default</button>
                 <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'undone'})} onClick={this.setFilter('undone')}>Undone</button>
                 <button className={classNames('button button-bottom',{filterActive:toDoList.filter === 'done'})} onClick={this.setFilter('done')}>Done</button>
-            </div>
+            </div></React.Fragment>
         );
     };
 }
